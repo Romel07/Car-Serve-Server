@@ -20,7 +20,7 @@ Romel----Romel07cuet@gmail.com
 
 #### Live Site Link:
 
-ClintSiteLink:  https://car-serve.firebaseapp.com/  &  ServerSiteLink:  https://agile-mesa-34540.herokuapp.com/
+ClientSiteLink:  https://car-serve.firebaseapp.com/  &  ServerSiteLink:  https://agile-mesa-34540.herokuapp.com/
 
 #### Acknowledgement:
 
