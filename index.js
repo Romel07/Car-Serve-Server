@@ -17,6 +17,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const serviceCollection = client.db("carServe").collection("automobileService");
   const reviewCollection = client.db("carServe").collection("userReviews");
+  const userOrderedCollection = client.db("carServe").collection("userOrders");
 
   app.get('/services', (req, res)=>{
     serviceCollection.find()
@@ -35,7 +36,7 @@ client.connect(err => {
       })
   })
 
-app.get('/reviews', (req, res)=>{
+  app.get('/reviews', (req, res)=>{
   reviewCollection.find()
   .toArray((err, data) => {
     res.send(data)
@@ -52,6 +53,33 @@ app.post('/addReview', (req, res)=>{
     })
 })
 
+app.post('/addOrderedServices', (req, res)=>{
+  const addedOrder = req.body;
+  console.log(addedOrder);
+  userOrderedCollection.insertOne(addedOrder)
+  .then(result =>{
+      res.send(result.insertedCount > 0)
+  })
+})
+
+app.get('/userBookings', (req, res)=>{
+  userOrderedCollection.find({email:req.query.email})
+  .toArray((err, bookings) => {
+    res.send(bookings)
+    console.log('from database', bookings);
+  })
+})
+
+app.get('/userBookingsForAdmin', (req, res)=>{
+  userOrderedCollection.find()
+  .toArray((err, allBookings) => {
+    res.send(allBookings)
+    console.log('from database', allBookings);
+  })
+})
+
+
+
 app.delete('/delete/:id', (req, res)=>{
   serviceCollection.deleteOne({_id: ObjectId(req.params.id)})
   .then(result => {
@@ -63,6 +91,8 @@ app.delete('/delete/:id', (req, res)=>{
 });
 
 
-
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 app.listen(process.env.PORT || port)
